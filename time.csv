@@ -1,3 +1,3 @@
 city,time(gmt),Indian Time Equivalent
-new york,Wed 15 Sep 2021 17:37:54 GMT,
-london,Tue 14 Sep 2021 19:04:22 GMT,
+new york,Wed 15 Sep 2021 17:37:54 GMT,"Wed, 15 Sep 2021 23:07:54 GMT"
+london,Tue 14 Sep 2021 19:04:22 GMT,"Wed, 15 Sep 2021 00:34:22 GMT"

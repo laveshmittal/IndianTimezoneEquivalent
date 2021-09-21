@@ -8,15 +8,14 @@ namespace IndianTimezoneEquivalent
     {
         //Path of CSV file containing Data
         const string PATH =
-            @"C:\Users\mittall\OneDrive - Lenze SE\Documents\LenzePracticeAssignments\IndianTimezoneEquivalent\time.csv";
+            @"..\..\..\time.csv";
 
 
         public static DateTime GetIndianTimeEquivalent(string dateTime)
         {
-            //Parsing given dateTime string into UTC dateTime object
-            var givenDateTime = DateTime.Parse(dateTime).ToUniversalTime();
-            
-            //Indian time is ahead by 5hours and 30 mins from UTC/GMT
+            //Parsing given dateTime string into dateTime object
+            var givenDateTime = DateTime.Parse(dateTime);
+            //Indian time is ahead by 5hours and 30 mins from GMT
             var timeDifference = TimeSpan.FromHours(5.5);
 
             return givenDateTime+timeDifference;
@@ -40,8 +39,8 @@ namespace IndianTimezoneEquivalent
                 .Trim();
 
             var indianTimeEquivalent = GetIndianTimeEquivalent(timeString)
-                .ToString("r");
-
+                .ToString("F");
+            
             //Writing the row with time equivalent back to new file
             //Remove the last empty block and append new time
             return String.Format($"{data[0]},{timeString},\"{indianTimeEquivalent}\"\n");
@@ -58,7 +57,8 @@ namespace IndianTimezoneEquivalent
             var rows = GetRowsFromCsvFile(PATH);
 
             //Writing the headers into result csv from given csv
-            resultCsvFile.Write(Encoding.ASCII.GetBytes( rows[0]+"\n"));
+            var columns = rows[0].Replace("\n","").Split(',');
+            resultCsvFile.Write(Encoding.ASCII.GetBytes($"{columns[0]},{columns[1]},Indian Time Equivalent\n" ));
 
 
             //traverse rows of csv to write back modified row into resultant csv
