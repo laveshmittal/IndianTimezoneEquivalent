@@ -11,14 +11,25 @@ namespace IndianTimezoneEquivalent
             @"..\..\..\time.csv";
 
 
-        public static DateTime GetIndianTimeEquivalent(string dateTime)
+        public static DateTime GetIndianTimeEquivalent(string dateTime,string cityName)
         {
             //Parsing given dateTime string into dateTime object
             var givenDateTime = DateTime.Parse(dateTime);
-            //Indian time is ahead by 5hours and 30 mins from GMT
-            var timeDifference = TimeSpan.FromHours(5.5);
+            var flag = false;
+            TimeZoneInfo cityTimeZoneinfo = TimeZoneInfo.Utc;
+            foreach (var systemTimeZone in TimeZoneInfo.GetSystemTimeZones())
+            {
+                if (systemTimeZone.DisplayName.ToLower().Contains(cityName.ToLower()))
+                {
+                    flag = true;
+                    cityTimeZoneinfo = systemTimeZone;
+                    break;
+                }
+            }
 
-            return givenDateTime+timeDifference;
+            Console.WriteLine($"{cityName}:{flag}");
+            var indiaTimeZone = TimeZoneInfo.FindSystemTimeZoneById("India Standard Time");
+            return TimeZoneInfo.ConvertTimeBySystemTimeZoneId(givenDateTime, cityTimeZoneinfo.Id, indiaTimeZone.Id);
         }
 
         
@@ -38,7 +49,7 @@ namespace IndianTimezoneEquivalent
                 .Replace(",", "")
                 .Trim();
 
-            var indianTimeEquivalent = GetIndianTimeEquivalent(timeString)
+            var indianTimeEquivalent = GetIndianTimeEquivalent(timeString,data[0])
                 .ToString("F");
             
             //Writing the row with time equivalent back to new file
@@ -71,6 +82,7 @@ namespace IndianTimezoneEquivalent
             resultCsvFile.Close();
             File.Delete(PATH);
             File.Move(resultCsvPath,PATH);
+
 
 
         }
